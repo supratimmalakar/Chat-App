@@ -36,8 +36,6 @@ function App() {
     if (user) {
       getAllUsers().then((data) => {
         const allUsers = [...data]
-        console.log(allUsers)
-        console.log(allUsers.length>0 && !allUsers.some(eachUser => eachUser.uid === user.uid))
         const userExists = allUsers.length > 0 && !allUsers.some(eachUser => eachUser.uid === user.uid)
         if (userExists) {
           createNewUser(user)

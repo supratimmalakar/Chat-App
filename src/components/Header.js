@@ -7,6 +7,7 @@ import {
     makeStyles
 } from '@material-ui/core'
 import AddContact from './AddContact'
+import Requests from './Requests'
 
 const useStyles = makeStyles({
     navbar : {
@@ -32,6 +33,7 @@ function Header({ user }) {
                     <Typography variant="h3">Chat App</Typography>
                     <Grid container item xs={2} direction='row' justifyContent='space-between'>
                         <AddContact user={user}/>
+                        <Requests user={user}/>
                         <img className={classes.displayImage} src={user.photoURL}/>
                     </Grid>
                 </Grid>
