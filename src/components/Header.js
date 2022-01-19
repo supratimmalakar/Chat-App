@@ -11,7 +11,8 @@ import Requests from './Requests'
 
 const useStyles = makeStyles({
     navbar : {
-        padding : '10px'
+        padding : '10px',
+        height : '9vh'
     },
     displayImage : {
         width : '60px',
