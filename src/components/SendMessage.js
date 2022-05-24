@@ -25,10 +25,10 @@ function SendMessage({ user, selectedChat }) {
         
     }
     return (
-        <Grid container xs={12}>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+        <Grid style={{background : 'rgba(255,255,255,0.2)'}} container xs={12}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'row', width: '100%', paddingLeft : '10px' }}>
                 <TextField fullWidth value={message} onChange={(e) => setMessage(e.target.value)} label='Message' variant='standard' />
-                <IconButton disabled={!message} type="submit"><Send color={message ? null : 'grey'} /></IconButton>
+                <IconButton disabled={!message} type="submit"><Send color={message ?  'rgba(0,0,0,0.5)' : '#d3d3d3ad'} /></IconButton>
             </form>
         </Grid>
     )

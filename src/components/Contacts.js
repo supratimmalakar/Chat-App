@@ -19,6 +19,7 @@ import {ChatIcon} from '../assets/CustomIcons'
 const useStyles = makeStyles({
     heading: {
         padding: '10px',
+        height : 74,
     },
     dp : {
         width : '50px',
@@ -27,11 +28,12 @@ const useStyles = makeStyles({
     },
     paper : {
         margin : '5px 0',
-        background : 'rgba(0,0,0,0.04)',
+        background : 'rgba(0,0,0,0.09)',
         padding : '3px'
     },
     container : {
-        overflowY : 'auto'
+        overflowY : 'auto',
+        padding : '0 10px',
     }
 })
 
@@ -80,7 +82,7 @@ function Contacts({user, setSelectedChat}) {
     return (
         <>
             <AppBar className={classes.heading} position='static'>
-                <Typography variant='h4' align='center'>
+                <Typography style={{ fontFamily: 'Montserrat', fontWeight: '700' }} variant='h4' align='center'>
                     Contacts
                 </Typography>
             </AppBar>
@@ -94,8 +96,8 @@ function Contacts({user, setSelectedChat}) {
                                         <img className={classes.dp} src={contact.photoURL}/>
                                     </Grid>
                                     <Grid container item xs={8} direction='column'>
-                                        <Typography variant='subtitle2'>{contact.name}</Typography>
-                                        <Typography variant='caption'>{contact.email}</Typography>
+                                        <Typography style={{ fontFamily: 'Montserrat'}} variant='subtitle2'>{contact.name}</Typography>
+                                        <Typography style={{ fontFamily: 'Montserrat'}} variant='caption'>{contact.email}</Typography>
                                     </Grid>
                                     <Grid item xs={2}>
                                         <IconButton onClick={()=> {handleChat(contact)}}><ChatIcon/></IconButton>

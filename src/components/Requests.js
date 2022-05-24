@@ -43,49 +43,49 @@ function Requests({ user }) {
         var contactAdded2 = false;
         var sentReqArr = []
         await db.collection("all-users").doc(req.from.uid).collection("sent-requests").where("to.uid", "==", user.uid)
-        .get()
-        .then(res => {
-            res.forEach(doc => {
-                sentReqArr.push({
-                    id : doc.id,
-                    ...doc.data()
+            .get()
+            .then(res => {
+                res.forEach(doc => {
+                    sentReqArr.push({
+                        id: doc.id,
+                        ...doc.data()
+                    })
                 })
             })
-        })
         await db.collection("all-users").doc(req.from.uid).collection("sent-requests").doc(sentReqArr[0].id)
-        .delete()
-        .then(res => {
-            sentDeleted = true;
-        })
-        .catch(err => {
-            console.log(err).
-            sentDeleted = false
-        })
+            .delete()
+            .then(res => {
+                sentDeleted = true;
+            })
+            .catch(err => {
+                console.log(err).
+                    sentDeleted = false
+            })
         await db.collection("all-users").doc(user.uid).collection("recieved-requests").doc(req.id)
-        .delete()
-        .then(res => {
-            recievedDeleted = true;
-        })
-        .catch(err => {
-            console.log(err)
-            recievedDeleted = false;
-        })
+            .delete()
+            .then(res => {
+                recievedDeleted = true;
+            })
+            .catch(err => {
+                console.log(err)
+                recievedDeleted = false;
+            })
         await db.collection("all-users").doc(user.uid).collection("contacts").doc(req.from.uid).set({
             ...req.from
         })
-        .then(res => {
-            contactAdded1 = true;
-        })
-        .catch(err => {
-            console.log(err)
-            contactAdded1 = false
-        })
+            .then(res => {
+                contactAdded1 = true;
+            })
+            .catch(err => {
+                console.log(err)
+                contactAdded1 = false
+            })
 
         await db.collection("all-users").doc(req.from.uid).collection("contacts").doc(user.uid).set({
-            name : user.displayName,
-            email : user.email,
-            photoURL : user.photoURL,
-            uid : user.uid
+            name: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            uid: user.uid
         })
             .then(res => {
                 contactAdded2 = true;
@@ -104,18 +104,18 @@ function Requests({ user }) {
         }
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         // getAllReqs()
         db.collection("all-users").doc(user.uid).collection("recieved-requests").orderBy('createdAt')
-        .onSnapshot(snapshot => {
-            setReqs(snapshot.docs.map(doc => (
-                {
-                    id : doc.id
-                    , ...doc.data()
-                })
-            ))
-        })
-    },[])
+            .onSnapshot(snapshot => {
+                setReqs(snapshot.docs.map(doc => (
+                    {
+                        id: doc.id
+                        , ...doc.data()
+                    })
+                ))
+            })
+    }, [])
 
     return (
         <>
@@ -130,32 +130,35 @@ function Requests({ user }) {
                 message={toastVariant === 'success' ? 'Request Accepted' : 'Error'}
                 action={[
                     <IconButton onClick={() => setToastOpen(false)}>
-                        <Cross color="#fff"/>
+                        <Cross color="#fff" />
                     </IconButton>
                 ]}
             />
             <IconButton onClick={() => setOpen(true)}><Request color="#fff" /></IconButton>
             <Dialog className={classes.dialog} open={open}>
                 <DialogTitle>
-                    <Typography variant='h6'>Requests</Typography>
+                    <Typography style={{ fontFamily: 'Montserrat' }} variant='h6'>Requests</Typography>
                 </DialogTitle>
                 <Grid container direction='column' alignItems='center'>
                     {
-                        reqs.length > 0 && 
-                        reqs.map(req => (
-                            <Grid container item direction='row'>
-                                <img className={classes.image} src={req.from.photoURL}/>
-                                <Typography>
-                                    {req.from.name}({req.from.email})
-                                </Typography>
-                                <Button onClick={() => handleAcceptReq(req)}>
-                                    Accept
-                                </Button>
-                            </Grid>
-                        )) 
+                        reqs.length > 0 ?
+                            reqs.map(req => (
+                                <Grid container item direction='row'>
+                                    <img className={classes.image} src={req.from.photoURL} />
+                                    <Typography>
+                                        {req.from.name}({req.from.email})
+                                    </Typography>
+                                    <Button onClick={() => handleAcceptReq(req)}>
+                                        Accept
+                                    </Button>
+                                </Grid>
+                            ))
+                            :
+                            (<Typography style={{fontFamily : 'Inter', color : 'rgba(0,0,0,0.3)', fontSize : '12px'}} >No requests</Typography>)
                     }
                 </Grid>
                 <Button
+                    style={{ margin: '10px  0' }}
                     onClick={() => {
                         setOpen(false);
                     }}

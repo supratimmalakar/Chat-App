@@ -13,11 +13,13 @@ import {
 } from '@material-ui/core'
 import { Add, Cross } from '../assets/CustomIcons'
 import { db } from '../firebase'
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles({
     dialog: {
         '& .MuiPaper-root': {
-            padding: '5px 30px'
+            padding: '5px 30px',
+            width : '400px',
         }
     },
     image: {
@@ -59,7 +61,7 @@ function AddContact({ user }) {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-        
+
         const sentReqRef = db.collection("all-users").doc(resultArr[0].uid).collection("recieved-requests")
         await sentReqRef.where("from.uid", "==", user.uid)
             .get()
@@ -70,7 +72,7 @@ function AddContact({ user }) {
                     })
                 });
             })
-        
+
         const recievedReqRef = db.collection("all-users").doc(user.uid).collection("recieved-requests")
         await recievedReqRef.where("from.uid", "==", resultArr[0].uid)
             .get()
@@ -83,9 +85,9 @@ function AddContact({ user }) {
             })
         const contactsRef = db.collection("all-users").doc(user.uid).collection("contacts")
         await contactsRef.doc(resultArr[0].uid).get()
-        .then(doc => {
-            setIsContact(doc.exists)
-        })
+            .then(doc => {
+                setIsContact(doc.exists)
+            })
         recievedReqArr.length > 0 ? setRecievedReqExists(true) : setRecievedReqExists(false)
         sentReqArr.length > 0 ? setSentReqExists(true) : setSentReqExists(false)
         setSearchResult(resultArr[0])
@@ -96,8 +98,8 @@ function AddContact({ user }) {
             to: {
                 name: searchResult.name,
                 uid: searchResult.uid,
-                email : searchResult.email,
-                photoURL : searchResult.photoURL
+                email: searchResult.email,
+                photoURL: searchResult.photoURL
             },
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         })
@@ -111,20 +113,20 @@ function AddContact({ user }) {
             },
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         })
-        .then(res => {
-            setToastOpen(true)
-            setToastVariant("success")
-            setOpen(false)
-            setSearchResult(null);
-            setSearchText("")
-        })
-        .catch(err => {
-            setToastOpen(true)
-            setToastVariant("error")
-            setOpen(false)
-            setSearchResult(null);
-            setSearchText("")
-        })
+            .then(res => {
+                setToastOpen(true)
+                setToastVariant("success")
+                setOpen(false)
+                setSearchResult(null);
+                setSearchText("")
+            })
+            .catch(err => {
+                setToastOpen(true)
+                setToastVariant("error")
+                setOpen(false)
+                setSearchResult(null);
+                setSearchText("")
+            })
 
     }
 
@@ -141,45 +143,54 @@ function AddContact({ user }) {
                 message={toastVariant === 'success' ? 'Request Sent' : 'Error'}
                 action={[
                     <IconButton onClick={() => setToastOpen(false)}>
-                        <Cross color="#fff"/>
+                        <Cross color="#fff" />
                     </IconButton>
                 ]}
             />
             <IconButton onClick={() => setOpen(true)}><Add color="#fff" /></IconButton>
             <Dialog className={classes.dialog} open={open}>
                 <DialogTitle>
-                    <Typography variant='h6'>Add Contacts</Typography>
+                    <Typography style={{ fontFamily: 'Montserrat' }} variant='h6'>Add Contacts</Typography>
                 </DialogTitle>
-                <TextField type='email' label="email" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
-                <Button onClick={handleSearch}>
-                    Search
-                </Button>
-                {searchResult && !(user.uid === searchResult.uid) &&
-                    <Grid container direction='row' xs={12} spacing={1} alignItems='center'>
-                        <Grid item xs={2}>
-                            <img className={classes.image} src={searchResult.photoURL} />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Typography variant='subtitle1'>{searchResult.name}</Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                            {!recievedReqExists ? 
-                                !isContact ? 
-                                <Button disabled={sentReqExists && recievedReqExists} onClick={handleSendRequest}>
-                                    {sentReqExists ? `Req Sent` : `Send Req`}
-                                </Button>
-                                :
-                                <Button disabled>
-                                    Friends
-                                </Button>
-                                :
-                                <Button disabled>
-                                    Check requests
-                                </Button>
-                            }
-                        </Grid>
-                    </Grid>}
+                <Grid container>
+                    <Grid item xs={10}>
+                        <TextField type='email' fullWidth label="email" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+                    </Grid>
+                    <Grid item container xs={2} direction='row' justifyContent='flex-end'>
+                        <IconButton onClick={handleSearch}>
+                            <SearchIcon />
+                        </IconButton>
+                    </Grid>
+                </Grid>
+                <div style={{ width : '100%',minHeight: '10px', marginTop : '20px' }}>
+                    {searchResult && !(user.uid === searchResult.uid) &&
+                        <Grid container direction='row'  alignItems='center' justifyContent='space-between'>
+                            <Grid item xs={2}>
+                                <img className={classes.image} src={searchResult.photoURL} />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography variant='subtitle1'>{searchResult.name}</Typography>
+                            </Grid>
+                            <Grid item container xs={4} direction='row' justifyContent='flex-end'>
+                                {!recievedReqExists ?
+                                    !isContact ?
+                                        <Button disabled={sentReqExists && recievedReqExists} onClick={handleSendRequest}>
+                                            {sentReqExists ? `Req Sent` : `Send Req`}
+                                        </Button>
+                                        :
+                                        <Button disabled>
+                                            Friends
+                                        </Button>
+                                    :
+                                    <Button disabled>
+                                        Check requests
+                                    </Button>
+                                }
+                            </Grid>
+                        </Grid>}
+                </div>
                 <Button
+                    style={{ margin: '10px  0' }}
                     onClick={() => {
                         setOpen(false);
                         setSearchResult(null);

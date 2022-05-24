@@ -15,6 +15,7 @@ const useStyles = makeStyles({
 function Main({user}) {
     const classes = useStyles()
     const [selectedChat, setSelectedChat] = useState(null)
+    const [selectedContact,setSelectedContact] = useState(null)
     return (
         <Grid container xs={12}>
             <Header user={user}/>
@@ -23,7 +24,10 @@ function Main({user}) {
                     <ChatList 
                         selectedChat={selectedChat} 
                         setSelectedChat={setSelectedChat} 
-                        user={user}/>
+                        user={user}
+                        setSelectedContact={setSelectedContact}
+                        selectedContact={selectedContact}
+                        />
                 </Grid>
                 <Grid item xs={6}>
                     <Chat 
